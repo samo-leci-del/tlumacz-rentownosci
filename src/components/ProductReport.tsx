@@ -38,8 +38,8 @@ export function ProductReport({ analizy }: ProductReportProps) {
             onClick={() => setFiltr(f)}
             className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
               filtr === f
-                ? 'bg-ink text-paper'
-                : 'bg-paper text-ink-muted shadow-sm hover:text-ink'
+                ? 'bg-slate-900 text-white'
+                : 'bg-white text-slate-500 shadow-sm hover:text-slate-900'
             }`}
           >
             {ETYKIETY_FILTROW[f]}
@@ -53,16 +53,16 @@ export function ProductReport({ analizy }: ProductReportProps) {
           return (
             <div
               key={`${a.row.sku}-${a.row.platforma}`}
-              className={`rounded-xl bg-paper p-5 shadow-sm ${
-                a.status === 'strata' ? 'border-l-4 border-accent' : ''
+              className={`rounded-xl bg-white p-5 shadow-sm ${
+                a.status === 'strata' ? 'border-l-4 border-red-600' : ''
               }`}
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="font-medium text-ink">
+                  <p className="font-medium text-slate-900">
                     {styl.ikona} {a.row.nazwaProduktu}
                   </p>
-                  <p className="mt-0.5 font-mono text-xs text-ink-faint">
+                  <p className="mt-0.5 font-mono text-xs text-slate-400">
                     {a.row.sku} · {a.row.platforma} · {a.row.kategoria}
                   </p>
                 </div>
@@ -70,7 +70,7 @@ export function ProductReport({ analizy }: ProductReportProps) {
                   <p className={`font-mono text-2xl font-bold ${styl.tekst}`}>
                     {formatPLN(a.zysk)}
                   </p>
-                  <p className="font-mono text-xs text-ink-faint">
+                  <p className="font-mono text-xs text-slate-400">
                     marża {a.marzaProcent.toFixed(1)}%
                   </p>
                 </div>
@@ -80,12 +80,12 @@ export function ProductReport({ analizy }: ProductReportProps) {
               >
                 {a.rekomendacja}
               </div>
-              <p className="mt-2 text-sm text-ink-muted">{a.uzasadnienie}</p>
+              <p className="mt-2 text-sm text-slate-500">{a.uzasadnienie}</p>
             </div>
           )
         })}
         {widoczne.length === 0 && (
-          <p className="py-8 text-center text-sm text-ink-faint">
+          <p className="py-8 text-center text-sm text-slate-400">
             Brak produktów w tej kategorii.
           </p>
         )}

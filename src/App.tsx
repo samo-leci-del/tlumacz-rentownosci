@@ -31,19 +31,30 @@ function App() {
 
   return (
     <div className="min-h-screen">
-      <header className="bg-paper shadow-sm">
-        <div className="mx-auto max-w-5xl px-6 py-5">
-          <h1 className="text-2xl font-bold text-ink">Tłumacz rentowności</h1>
-          <p className="text-sm text-ink-muted">
-            Zamień eksport sprzedaży na konkretną rekomendację — co traci pieniądze, co podnieść
-            w cenie, co wycofać.
-          </p>
-        </div>
-      </header>
+      {widok.typ !== 'start' && (
+        <header className="bg-white shadow-sm">
+          <div className="mx-auto max-w-5xl px-6 py-5">
+            <h1 className="text-2xl font-bold text-slate-900">Tłumacz rentowności</h1>
+            <p className="text-sm text-slate-500">
+              Zamień eksport sprzedaży na konkretną rekomendację — co traci pieniądze, co
+              podnieść w cenie, co wycofać.
+            </p>
+          </div>
+        </header>
+      )}
 
       <main className="mx-auto max-w-5xl px-6 py-10">
         {widok.typ === 'start' && (
-          <div className="flex flex-col items-center gap-6 py-10">
+          <div className="flex flex-col items-center gap-8 py-16">
+            <div className="max-w-xl text-center">
+              <h1 className="text-4xl font-extrabold text-slate-900 sm:text-5xl">
+                Tłumacz rentowności
+              </h1>
+              <p className="mt-4 text-base text-slate-500 sm:text-lg">
+                Zamień eksport sprzedaży na konkretną rekomendację — co traci pieniądze, co
+                podnieść w cenie, co wycofać.
+              </p>
+            </div>
             <FileUpload onFileLoaded={wczytajPlik} />
           </div>
         )}
@@ -57,12 +68,12 @@ function App() {
         {widok.typ === 'raport' && (
           <div className="space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-sm text-ink-muted">
+              <p className="text-sm text-slate-500">
                 Przeanalizowano {widok.rows.length} pozycji sprzedażowych
               </p>
               <button
                 onClick={() => setWidok({ typ: 'start' })}
-                className="rounded-lg bg-paper px-3 py-1.5 text-sm font-medium text-ink-muted shadow-sm hover:text-ink"
+                className="rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-slate-500 shadow-sm hover:text-slate-900"
               >
                 Wgraj inny plik
               </button>
