@@ -106,9 +106,21 @@ export function zbudujRekomendacje(
     }
 
     const rekomendacja = 'Wycofaj produkt z oferty'
+    const uzasadnienieBazowe = `Sprzedałeś tylko ${row.sprzedaneSzt} szt. i przy tym tracisz ${fmt(Math.abs(metryki.zysk))} łącznie. `
+    const { nazwa: dominujacyKoszt } = najwiekszyKoszt(row, metryki)
+
+    if (dominujacyKoszt === 'straty na zwrotach' && metryki.wskaznikZwrotow > PROG_WYSOKICH_ZWROTOW) {
+      const procent = Math.round(metryki.wskaznikZwrotow * 100)
+      const uzasadnienie =
+        uzasadnienieBazowe +
+        `Aż ${procent}% sprzedanych sztuk wraca jako zwrot (koszt ${fmt(metryki.kosztZwrotow)}) — to główna przyczyna straty, nie tylko niski popyt. ` +
+        `Przy tak małym wolumenie i tak nie opłaca się utrzymywać oferty, ale warto sprawdzić opis, zdjęcia lub jakość przed wprowadzeniem podobnego produktu.`
+      return { status: 'strata', rekomendacja, uzasadnienie }
+    }
+
     const uzasadnienie =
-      `Sprzedałeś tylko ${row.sprzedaneSzt} szt. i przy tym tracisz ${fmt(Math.abs(metryki.zysk))} łącznie. ` +
-      `Niski popyt i strata na każdej sztuce — utrzymywanie tej oferty nie ma sensu.` +
+      uzasadnienieBazowe +
+      'Niski popyt i strata na każdej sztuce — utrzymywanie tej oferty nie ma sensu.' +
       zdanieOZwrotach(metryki)
     return { status: 'strata', rekomendacja, uzasadnienie }
   }
