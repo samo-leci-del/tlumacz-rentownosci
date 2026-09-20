@@ -1,5 +1,5 @@
 import type { ProductAnalysis, SalesRow } from '../types'
-import { STAWKI_PROWIZJI } from './platformRates'
+import { pobierzStawke } from './platformRates'
 import { zbudujRekomendacje } from './recommendations'
 
 export interface Metryki {
@@ -19,7 +19,7 @@ export interface Metryki {
  * to utracony przychód (zwrot pieniędzy) i utracony koszt zakupu (towar nie wraca do sprzedaży).
  */
 export function obliczMetryki(row: SalesRow): Metryki {
-  const stawka = STAWKI_PROWIZJI[row.platforma]
+  const stawka = pobierzStawke(row.kategoria, row.platforma)
 
   const przychod = row.cenaSprzedazy * row.sprzedaneSzt
   const kosztZakupu = row.cenaZakupu * row.sprzedaneSzt

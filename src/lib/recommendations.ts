@@ -1,6 +1,6 @@
 import type { SalesRow, StatusKategorii } from '../types'
 import { formatPLN as fmt } from './format'
-import { STAWKI_PROWIZJI } from './platformRates'
+import { pobierzStawke } from './platformRates'
 import type { Metryki } from './profitability'
 
 /** Poniżej tej liczby sztuk/mies. uznajemy popyt na produkt za niski. */
@@ -22,7 +22,7 @@ const MAX_MNOZNIK_PODWYZKI = 1.5
  * Zwraca null, gdy sama podwyżka ceny nie wystarczy (mianownik <= 0).
  */
 function cenaDlaDocelowejMarzy(row: SalesRow, metryki: Metryki): number | null {
-  const stawka = STAWKI_PROWIZJI[row.platforma]
+  const stawka = pobierzStawke(row.kategoria, row.platforma)
   const staleKoszty = metryki.kosztZakupu + row.wydatkiAds + row.liczbaZwrotow * row.cenaZakupu
   const mianownik = row.sprzedaneSzt * (1 - stawka - DOCELOWA_MARZA) - row.liczbaZwrotow
 

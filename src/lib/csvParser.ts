@@ -33,7 +33,7 @@ const PLATFORMY: Record<string, Platform> = {
   erli: 'Erli',
 }
 
-function usunPolskieZnaki(tekst: string): string {
+export function usunPolskieZnaki(tekst: string): string {
   return tekst
     .toLowerCase()
     .replace(/ą/g, 'a')

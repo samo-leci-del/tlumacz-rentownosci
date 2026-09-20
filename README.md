@@ -19,8 +19,10 @@ klienta zostają na jego komputerze.
 
 ## Uproszczenia MVP
 
-- **Stawki prowizji** — jedna reprezentatywna wartość per platforma zamiast pełnej tabeli
-  kategorii (patrz `src/lib/platformRates.ts`): Allegro 12%, Empik 9%, Amazon 10%, Erli 8%.
+- **Stawki prowizji** — tabela kategoria × platforma dla 8 głównych kategorii e-commerce
+  (patrz `src/lib/platformRates.ts`), realistyczne przybliżenia w widełkach z brief'u, nie
+  ceniki 1:1 z regulaminów platform. Kategoria spoza tabeli dostaje cichy fallback (dawne
+  stałe: Allegro 12%, Empik 9%, Amazon 10%, Erli 8%) zamiast błędu.
 - **Koszt zwrotu** liczony jako `cena sprzedaży + cena zakupu` na sztukę (utracony przychód
   + utracony koszt zakupu, zakładając że zwrócony towar nie wraca do sprzedaży).
 - Brak integracji z API platform — dane wgrywane są ręcznie jako CSV.
