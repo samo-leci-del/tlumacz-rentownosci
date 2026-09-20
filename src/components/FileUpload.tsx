@@ -54,9 +54,7 @@ export function FileUpload({ onFileLoaded }: FileUploadProps) {
         <p className="text-base font-medium text-slate-700">
           Przeciągnij tu plik CSV albo kliknij, żeby go wybrać
         </p>
-        <p className="text-sm text-slate-400">
-          Eksport sprzedaży z Allegro, Empiku, Amazona lub Erli
-        </p>
+        <p className="text-sm text-slate-400">Twoje dane sprzedażowe w formacie CSV</p>
         <input
           type="file"
           accept=".csv,text/csv"
@@ -67,17 +65,28 @@ export function FileUpload({ onFileLoaded }: FileUploadProps) {
           }}
         />
       </label>
-      <p className="mt-4 text-center text-sm text-slate-400">
-        Nie masz jeszcze pliku?{' '}
+      <div className="mt-6 text-center">
+        <p className="text-sm text-slate-500">
+          Plik CSV musi mieć kolumny:{' '}
+          <span className="font-mono text-xs text-slate-600">
+            SKU, Nazwa produktu, Kategoria, Platforma, Cena zakupu, Cena sprzedaży, Sprzedane
+            szt., Wydatki Ads, Liczba zwrotów
+          </span>
+          . Żadna platforma nie eksportuje takiego zestawienia bezpośrednio — skleisz je sam z
+          kilku źródeł (np. BaseLinker, panel reklamowy platformy, własne ceny zakupu).
+        </p>
         <a
           href="/przykladowe-dane-sprzedazowe.csv"
           download
-          className="font-medium text-accent underline underline-offset-2 hover:text-slate-900"
+          className="mt-4 inline-block rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-white shadow-sm hover:opacity-90"
         >
-          Pobierz przykładowy plik
-        </a>{' '}
-        i zobacz, jak to działa.
-      </p>
+          Pobierz wzór pliku
+        </a>
+        <p className="mt-2 text-xs text-slate-400">
+          To wzór struktury, nie gotowe dane — podstaw własną sprzedaż, żeby zobaczyć wynik dla
+          swojego sklepu.
+        </p>
+      </div>
     </div>
   )
 }
