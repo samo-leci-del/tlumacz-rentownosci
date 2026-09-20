@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { formatPLN } from '../lib/format'
+import { STATUS_STYLE } from '../lib/statusStyles'
 import type { ProductAnalysis } from '../types'
 
 interface SummaryCardsProps {
@@ -23,7 +24,7 @@ export function SummaryCards({ analizy }: SummaryCardsProps) {
         etykieta="Łączny zysk netto"
         wartosc={formatPLN(dane.sumaZysku)}
         podtekst={`z ${analizy.length} pozycji w raporcie`}
-        kolor={dane.sumaZysku >= 0 ? 'text-emerald-700' : 'text-red-700'}
+        kolor={dane.sumaZysku >= 0 ? STATUS_STYLE.zdrowy.tekst : STATUS_STYLE.strata.tekst}
       />
       <Karta
         etykieta="Tracą pieniądze"
@@ -33,19 +34,19 @@ export function SummaryCards({ analizy }: SummaryCardsProps) {
             ? `łącznie ${formatPLN(Math.abs(dane.sumaStrat))} straty / mies.`
             : 'żaden produkt nie przynosi straty'
         }
-        kolor="text-red-700"
+        kolor={STATUS_STYLE.strata.tekst}
       />
       <Karta
         etykieta="Niska marża"
         wartosc={`${dane.niskaMarza.length}`}
         podtekst="warto zoptymalizować cenę lub koszty"
-        kolor="text-amber-600"
+        kolor={STATUS_STYLE.niska_marza.tekst}
       />
       <Karta
         etykieta="Zdrowe produkty"
         wartosc={`${dane.zdrowe.length}`}
         podtekst="marża 15% lub więcej"
-        kolor="text-emerald-700"
+        kolor={STATUS_STYLE.zdrowy.tekst}
       />
     </div>
   )
@@ -63,10 +64,10 @@ function Karta({
   kolor: string
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-      <p className="text-sm font-medium text-slate-500">{etykieta}</p>
-      <p className={`mt-2 text-2xl font-semibold ${kolor}`}>{wartosc}</p>
-      <p className="mt-1 text-xs text-slate-400">{podtekst}</p>
+    <div className="rounded-2xl bg-paper p-5 shadow-sm">
+      <p className="text-sm font-medium text-ink-muted">{etykieta}</p>
+      <p className={`mt-2 font-mono text-2xl font-bold whitespace-nowrap ${kolor}`}>{wartosc}</p>
+      <p className="mt-1 text-xs text-ink-faint">{podtekst}</p>
     </div>
   )
 }

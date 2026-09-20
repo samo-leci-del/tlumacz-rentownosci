@@ -34,12 +34,12 @@ export function FileUpload({ onFileLoaded }: FileUploadProps) {
         }}
         className={`flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-8 py-16 text-center transition-colors ${
           przeciagane
-            ? 'border-slate-900 bg-slate-50'
-            : 'border-slate-300 bg-white hover:border-slate-400'
+            ? 'border-accent bg-accent/5'
+            : 'border-ink-faint bg-paper shadow-sm hover:border-ink-muted'
         }`}
       >
         <svg
-          className="h-10 w-10 text-slate-400"
+          className="h-10 w-10 text-ink-faint"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -51,10 +51,10 @@ export function FileUpload({ onFileLoaded }: FileUploadProps) {
             d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
           />
         </svg>
-        <p className="text-base font-medium text-slate-700">
+        <p className="text-base font-medium text-ink">
           Przeciągnij tu plik CSV albo kliknij, żeby go wybrać
         </p>
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-ink-faint">
           Eksport sprzedaży z Allegro, Empiku, Amazona lub Erli
         </p>
         <input
@@ -67,12 +67,12 @@ export function FileUpload({ onFileLoaded }: FileUploadProps) {
           }}
         />
       </label>
-      <p className="mt-4 text-center text-sm text-slate-400">
+      <p className="mt-4 text-center text-sm text-ink-faint">
         Nie masz jeszcze pliku?{' '}
         <a
           href="/przykladowe-dane-sprzedazowe.csv"
           download
-          className="font-medium text-slate-600 underline underline-offset-2 hover:text-slate-900"
+          className="font-medium text-accent underline underline-offset-2 hover:text-ink"
         >
           Pobierz przykładowy plik
         </a>{' '}

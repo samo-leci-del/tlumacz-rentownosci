@@ -30,11 +30,11 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
+    <div className="min-h-screen">
+      <header className="bg-paper shadow-sm">
         <div className="mx-auto max-w-5xl px-6 py-5">
-          <h1 className="text-xl font-semibold text-slate-900">Tłumacz rentowności</h1>
-          <p className="text-sm text-slate-500">
+          <h1 className="text-2xl font-bold text-ink">Tłumacz rentowności</h1>
+          <p className="text-sm text-ink-muted">
             Zamień eksport sprzedaży na konkretną rekomendację — co traci pieniądze, co podnieść
             w cenie, co wycofać.
           </p>
@@ -57,19 +57,19 @@ function App() {
         {widok.typ === 'raport' && (
           <div className="space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-ink-muted">
                 Przeanalizowano {widok.rows.length} pozycji sprzedażowych
               </p>
               <button
                 onClick={() => setWidok({ typ: 'start' })}
-                className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-100"
+                className="rounded-lg bg-paper px-3 py-1.5 text-sm font-medium text-ink-muted shadow-sm hover:text-ink"
               >
                 Wgraj inny plik
               </button>
             </div>
 
             {widok.ostrzezenia.length > 0 && (
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+              <div className="rounded-xl bg-amber-50 p-4 text-sm text-amber-800 shadow-sm">
                 <p className="font-medium">
                   Pominięto {widok.ostrzezenia.length}{' '}
                   {widok.ostrzezenia.length === 1 ? 'wiersz' : 'wierszy'} z błędami:
