@@ -181,6 +181,14 @@ export function parseCsv(tekstCsv: string): ParseResult {
       return
     }
 
+    if (sprzedaneSzt! < 0) {
+      errors.push({
+        wiersz: numerWiersza,
+        komunikat: `Wiersz ${numerWiersza} (${sku}): liczba sprzedanych sztuk nie może być ujemna (wpisano: ${sprzedaneSzt}) — sprawdź dane źródłowe. Wiersz pominięty.`,
+      })
+      return
+    }
+
     if (liczbaZwrotow! > sprzedaneSzt!) {
       errors.push({
         wiersz: numerWiersza,
