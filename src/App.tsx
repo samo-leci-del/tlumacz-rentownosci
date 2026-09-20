@@ -32,7 +32,7 @@ function App() {
   return (
     <div className="min-h-screen">
       {widok.typ !== 'start' && (
-        <header className="bg-white shadow-sm">
+        <header>
           <div className="mx-auto max-w-5xl px-6 py-5">
             <h1 className="text-2xl font-bold text-slate-900">Tłumacz rentowności</h1>
             <p className="text-sm text-slate-500">
