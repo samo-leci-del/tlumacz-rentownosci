@@ -11,6 +11,8 @@ const PROG_ZDROWEJ_MARZY = 15
 const DOCELOWA_MARZA = 0.1
 /** Powyżej tego wskaźnika zwrotów dopisujemy ostrzeżenie w uzasadnieniu. */
 const PROG_WYSOKICH_ZWROTOW = 0.15
+/** Powyżej tylu razy obecnej ceny sugerowaną podwyżkę uznajemy za nierealną biznesowo. */
+const MAX_MNOZNIK_PODWYZKI = 1.5
 
 /**
  * Cena sprzedaży, przy której marża osiągnęłaby DOCELOWA_MARZA — przy założeniu
@@ -37,6 +39,36 @@ function najwiekszyKoszt(row: SalesRow, metryki: Metryki): { nazwa: string; kwot
   return skladniki.reduce((a, b) => (b.kwota > a.kwota ? b : a))
 }
 
+/**
+ * Gdy sama podwyżka ceny nie jest realną rekomendacją (cenaDlaDocelowejMarzy zwróciła null
+ * albo wyszła nierealnie wysoka), wskazujemy zamiast tego główną przyczynę straty —
+ * na podstawie tego, który koszt zjada najwięcej (najwiekszyKoszt).
+ */
+function opisGlownejPrzyczyny(row: SalesRow, metryki: Metryki): { rekomendacja: string; uzasadnienie: string } {
+  const { nazwa } = najwiekszyKoszt(row, metryki)
+
+  if (nazwa === 'straty na zwrotach' && metryki.wskaznikZwrotow > PROG_WYSOKICH_ZWROTOW) {
+    const procent = Math.round(metryki.wskaznikZwrotow * 100)
+    return {
+      rekomendacja: `Bardzo wysoki wskaźnik zwrotów (${procent}%) to główny problem, nie cena`,
+      uzasadnienie: `Aż ${procent}% sprzedanych sztuk wraca jako zwrot (koszt ${fmt(metryki.kosztZwrotow)}) — sama podwyżka ceny by tego nie naprawiła. Sprawdź opis produktu, zdjęcia, rozmiarówkę lub jakość przed dalszą sprzedażą.`,
+    }
+  }
+
+  if (nazwa === 'wydatki na reklamę') {
+    return {
+      rekomendacja: 'Ogranicz wydatki na reklamę zamiast podnosić cenę',
+      uzasadnienie: `Wydatki na Ads (${fmt(row.wydatkiAds)}) zjadają całą marżę, a wymagana podwyżka ceny byłaby nierealna do wprowadzenia. Zacznij od optymalizacji kampanii.`,
+    }
+  }
+
+  return {
+    rekomendacja: 'Sama podwyżka ceny tego nie naprawi — przejrzyj koszty produktu',
+    uzasadnienie:
+      'Żeby produkt wyszedł na plus, cena musiałaby wzrosnąć o skalę nierealną do wprowadzenia. Warto przejrzeć całą strukturę kosztów (zakup, prowizję platformy, reklamę, zwroty).',
+  }
+}
+
 function zdanieOZwrotach(metryki: Metryki): string {
   if (metryki.wskaznikZwrotow <= PROG_WYSOKICH_ZWROTOW) return ''
   const procent = Math.round(metryki.wskaznikZwrotow * 100)
@@ -54,14 +86,23 @@ export function zbudujRekomendacje(
 
     if (dobryPopyt) {
       const sugerowanaCena = cenaDlaDocelowejMarzy(row, metryki)
-      const rekomendacja = sugerowanaCena
-        ? `Podnieś cenę do ok. ${fmt(sugerowanaCena)} (obecnie ${fmt(row.cenaSprzedazy)})`
-        : 'Podnieś cenę — obecna nie pokrywa kosztów nawet przy dużej sprzedaży'
-      const uzasadnienie =
+      const podwyzkaRealna =
+        sugerowanaCena !== null && sugerowanaCena <= row.cenaSprzedazy * MAX_MNOZNIK_PODWYZKI
+      const uzasadnienieStraty =
         `Sprzedałeś ${row.sprzedaneSzt} szt., ale tracisz ${fmt(Math.abs(zyskNaSztuke))} na sztuce ` +
-        `(łącznie ${fmt(Math.abs(metryki.zysk))} straty). Jest popyt, więc warto podnieść cenę zamiast wycofywać produkt.` +
-        zdanieOZwrotach(metryki)
-      return { status: 'strata', rekomendacja, uzasadnienie }
+        `(łącznie ${fmt(Math.abs(metryki.zysk))} straty). `
+
+      if (podwyzkaRealna) {
+        const rekomendacja = `Podnieś cenę do ok. ${fmt(sugerowanaCena!)} (obecnie ${fmt(row.cenaSprzedazy)})`
+        const uzasadnienie =
+          uzasadnienieStraty +
+          'Jest popyt, więc warto podnieść cenę zamiast wycofywać produkt.' +
+          zdanieOZwrotach(metryki)
+        return { status: 'strata', rekomendacja, uzasadnienie }
+      }
+
+      const { rekomendacja, uzasadnienie: przyczyna } = opisGlownejPrzyczyny(row, metryki)
+      return { status: 'strata', rekomendacja, uzasadnienie: uzasadnienieStraty + przyczyna }
     }
 
     const rekomendacja = 'Wycofaj produkt z oferty'
